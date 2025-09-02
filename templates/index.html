@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sample Split</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600&family=Poppins:wght@300;400&display=swap" rel="stylesheet"/>
+    <style>
+      :root{
+        --bg:#000; --panel:#151e3a; --subpanel:#0f1730; --ink:#f3f3f3; --muted:#aab;
+        --field:#2d3748; --accent:#00aaff; --border:#223055;
+      }
+      *{box-sizing:border-box}
+      body{
+        font-family:"Poppins",sans-serif;background:var(--bg);color:var(--ink);
+        margin:0;padding:40px;
+      }
+      .container{
+        max-width:1000px;margin:auto;background:var(--panel);border-radius:18px;
+        padding:28px;box-shadow:0 0 24px rgba(0,170,255,.18);
+      }
+      h2{
+        text-align:center;font-family:"Exo 2",sans-serif;font-size:32px;margin:0 0 20px;color:#fff;
+      }
+      label{display:block;margin-top:14px;font-size:15px}
+      input[type="text"],input[type="datetime-local"],input[type="number"],select,textarea{
+        width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);
+        margin-top:8px;background:var(--field);color:#fff;font-size:15px;
+      }
+      textarea{resize:vertical;min-height:140px} /* bigger desc box */
+
+      /* layout helpers */
+      .grid{display:grid;gap:18px}
+      .g2{grid-template-columns:1fr 1fr}
+      .g3{grid-template-columns:repeat(3,1fr)}
+      @media (max-width:960px){.g2,.g3{grid-template-columns:1fr}}
+
+      .section{
+        padding:16px;border:1px solid var(--border);border-radius:14px;background:var(--subpanel);
+      }
+      .section h3{
+        margin:0 0 10px;font-size:18px;color:#e8eeff;font-family:"Exo 2",sans-serif;
+      }
+
+      .channel-toggles{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+      .channel-toggles label{
+        display:flex;gap:8px;align-items:center;background:#101a39;border:1px solid var(--border);
+        border-radius:12px;padding:10px 12px;font-size:15px
+      }
+
+      .inline{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:8px}
+      .inline label{display:flex;gap:8px;align-items:center;margin:0;font-size:15px}
+
+      .progress{margin-top:24px}
+      .bar{background:var(--field);height:26px;border-radius:10px;overflow:hidden}
+      .fill{height:100%;width:0%;background:var(--accent);transition:width .3s ease;
+        color:#fff;font-weight:700;text-align:center;line-height:26px}
+
+      .btn{
+        padding:12px 18px;border:none;border-radius:30px;font-weight:700;font-family:"Exo 2",sans-serif;
+        background:linear-gradient(135deg,#003a73,#002149);color:#fff;cursor:pointer;font-size:15px;
+      }
+      .btn:disabled{background:#404a63;cursor:not-allowed;opacity:.6}
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h2>Sample Split</h2>
+
+      <label>Playlist or Track ID</label>
+      <input id="playlistId" type="text" placeholder="Enter playlist or track ID..."/>
+
+      <div class="section">
+        <h3>Upload Targets</h3>
+        <div class="channel-toggles">
+          <label><input type="checkbox" id="vocalChannel"/> Acapella</label>
+          <label><input type="checkbox" id="drumChannel"/> Drum</label>
+          <label><input type="checkbox" id="sampleSplitChannel"/> Sample Split</label>
+          <label><input type="checkbox" id="mainChannel"/> Main</label>
+          <label><input type="checkbox" id="backupChannel"/> Backup</label>
+        </div>
+      </div>
+
+      <div class="grid g2">
+        <div class="section">
+          <h3>Schedule</h3>
+          <label>Start Time</label>
+          <input id="scheduleStart" type="datetime-local"/>
+          <label>Interval</label>
+          <select id="interval">
+            <option value="60">Every Hour</option>
+            <option value="120">Every 2 Hours</option>
+            <option value="240">Every 4 Hours</option>
+            <option value="1440">Daily</option>
+          </select>
+        </div>
+
+        <div class="section">
+          <h3>Meta</h3>
+          <!-- first row: genre / privacy -->
+          <div class="grid g2">
+            <div>
+              <label>Genre</label>
+              <select id="genre">
+                <option value="hiphop">Hip-Hop</option>
+                <option value="rnb">R&B</option>
+                <option value="jazz">Jazz</option>
+                <option value="soul">Soul</option>
+                <option value="rock">Rock</option>
+                <option value="pop">Pop</option>
+                <option value="electronic">Electronic</option>
+                <option value="world">World</option>
+              </select>
+            </div>
+            <div>
+              <label>Privacy</label>
+              <select id="privacy">
+                <option value="public">Public</option>
+                <option value="unlisted">Unlisted</option>
+                <option value="private" selected>Private</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- second row: audience -->
+          <label>Audience</label>
+          <div class="inline">
+            <label><input type="radio" name="audience" id="audienceKids"/> Made for Kids</label>
+            <label><input type="radio" name="audience" id="audienceNotKids" checked/> Not Made for Kids</label>
+          </div>
+
+          <!-- third row: toggles -->
+          <div class="inline" style="margin-top:6px">
+            <label><input type="checkbox" id="monetize"/> Enable Monetization</label>
+            <label><input type="checkbox" id="ytCheckbox" checked/> Upload to YouTube</label>
+            <label><input type="checkbox" id="trimCheckbox"/> Trim Track</label>
+          </div>
+
+          <!-- fourth row: trim length / playlist radio -->
+          <div class="grid g2">
+            <div>
+              <label>Trim Length (seconds)</label>
+              <input id="trimLengthInput" type="number" placeholder="e.g. 60" min="1"/>
+            </div>
+            <div>
+              <label>Playlist (Auto-Add)</label>
+              <div class="inline">
+                <label><input type="radio" name="playlistSel" value="acapella"/> Acapella</label>
+                <label><input type="radio" name="playlistSel" value="drumz"/> Drumz</label>
+                <label><input type="radio" name="playlistSel" value="none" checked/> None</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Presets -->
+      <div class="section">
+        <h3>Presets (auto-apply)</h3>
+        <div class="grid g3">
+          <div>
+            <label>Preset</label>
+            <select id="presetSelect">
+              <option value="">— Choose a preset —</option>
+              <option value="hiphop_basic">Hip-Hop (Basic)</option>
+              <option value="rnb_vibes">R&B Vibes</option>
+              <option value="electronic_club">Electronic / Club</option>
+              <option value="generic_credit">Generic + Credits</option>
+            </select>
+          </div>
+          <div>
+            <label>Apply Mode</label>
+            <div class="inline">
+              <label><input type="radio" name="presetMode" value="replace" checked/> Replace</label>
+              <label><input type="radio" name="presetMode" value="append"/> Append</label>
+            </div>
+          </div>
+          <div>
+            <label>Apply To</label>
+            <div class="inline">
+              <label><input type="checkbox" id="applyDesc" checked/> Description</label>
+              <label><input type="checkbox" id="applyTags" checked/> Tags</label>
+            </div>
+          </div>
+        </div>
+
+        <label>Description</label>
+        <textarea id="videoDesc" rows="10" placeholder="Include hashtags, links, etc."></textarea>
+
+        <label>YouTube Tags (comma-separated)</label>
+        <input id="videoTags" type="text" placeholder="e.g. hiphop, J.Cole, remix"/>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;margin-top:16px">
+        <button class="btn" id="splitButton" onclick="runSplit()">Start Split</button>
+      </div>
+
+      <div class="progress">
+        <label>Progress</label>
+        <div class="bar"><div class="fill" id="progressFill">0%</div></div>
+        <div id="channelText"></div>
+        <div id="statusText"></div>
+      </div>
+    </div>
+
+    <script>
+      // --- Preset templates ---------------------------------------------------
+      const PRESETS = {
+        hiphop_basic: {
+          desc:
+`🔥 New upload from Sample Split!
+Subscribe & hit the bell for more acapellas, drums, and instrumentals.
+
+Use for practice, remixing, or educational purposes.
+Support the original artist • Stream the original track.
+
+#HipHop #Beats #Acapella #Drums #Remix`,
+          tags: "hiphop,rap,beats,boom bap,trap,remix,acapella,drums,sample split"
+        },
+        rnb_vibes: {
+          desc:
+`Smooth R&B vibes 🎶
+Subscribe for acapellas, drums, and instrumentals weekly.
+
+All rights belong to their respective owners. For promo/educational use.
+
+#RnB #Soul #Acapella #Drums`,
+          tags: "rnb,soul,slowjam,acapella,drums,remix,vocals,rhythm and blues"
+        },
+        electronic_club: {
+          desc:
+`Club-ready stems ⚡
+Perfect for DJs & producers — acapellas and drum stems.
+
+Follow & subscribe for more uploads every week!
+
+#EDM #Electronic #DJ #Acapella #Drums`,
+          tags: "edm,electronic,club,dj,house,techno,acapella,drums,remix,producer tools"
+        },
+        generic_credit: {
+          desc:
+`Thanks for listening! 🙌
+Like • Comment • Subscribe
+
+Credits:
+— Music belongs to the original artist/label.
+— This channel shares stems for practice & educational use.
+
+#Music #Acapella #Drums #Instrumental`,
+          tags: "music,acapella,drums,instrumental,practice,producer,remix,cover"
+        }
+      };
+
+      // Auto-apply preset when selection changes
+      document.getElementById("presetSelect").addEventListener("change", () => {
+        const key = document.getElementById("presetSelect").value;
+        const preset = PRESETS[key];
+        if (!preset) return;
+
+        const applyDesc = document.getElementById("applyDesc").checked;
+        const applyTags = document.getElementById("applyTags").checked;
+        const mode = document.querySelector('input[name="presetMode"]:checked')?.value || "replace";
+
+        if (applyDesc) {
+          const el = document.getElementById("videoDesc");
+          if (mode === "append" && el.value.trim()) {
+            el.value = el.value.trim() + "\n\n" + preset.desc;
+          } else {
+            el.value = preset.desc;
+          }
+        }
+        if (applyTags) {
+          const el = document.getElementById("videoTags");
+          if (mode === "append" && el.value.trim()) {
+            const merged = (el.value + "," + preset.tags)
+              .split(",")
+              .map(t => t.trim())
+              .filter(Boolean);
+            const seen = new Set();
+            el.value = merged.filter(t => (seen.has(t) ? false : seen.add(t))).join(", ");
+          } else {
+            el.value = preset.tags;
+          }
+        }
+      });
+      // ----------------------------------------------------------------------
+
+      function getPlaylistSelection(){
+        const radios = document.querySelectorAll('input[name="playlistSel"]');
+        for (const r of radios) if (r.checked) return r.value;
+        return "none";
+      }
+
+      async function runSplit(){
+        const btn = document.getElementById("splitButton");
+        btn.disabled = true;
+
+        const sessionId = document.getElementById("playlistId").value.trim();
+
+        const channels = [];
+        if (document.getElementById("vocalChannel").checked) channels.push("son_got_acappellas");
+        if (document.getElementById("drumChannel").checked) channels.push("son_got_drums");
+        if (document.getElementById("sampleSplitChannel").checked) channels.push("sample_split");
+        if (document.getElementById("mainChannel").checked) channels.push("main_channel");
+        if (document.getElementById("backupChannel").checked) channels.push("sgs_2");
+
+        const trimTrack = document.getElementById("trimCheckbox").checked;
+        const trimLength = parseInt(document.getElementById("trimLengthInput").value || "60");
+        const offsetMinutes = new Date().getTimezoneOffset();
+        const playlistSelection = getPlaylistSelection();
+
+        const payload = {
+          track_id: sessionId,
+          channels,
+          yt: document.getElementById("ytCheckbox").checked,
+          ec2: false,
+          trim_track: trimTrack,
+          trim_length: trimLength,
+          schedule_start_time: document.getElementById("scheduleStart").value,
+          schedule_offset_minutes: offsetMinutes,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          schedule_interval_minutes: parseInt(document.getElementById("interval").value),
+          privacy: document.getElementById("privacy").value,
+          made_for_kids: document.getElementById("audienceKids").checked,
+          tags: document.getElementById("videoTags").value.split(",").map(t=>t.trim()).filter(Boolean),
+          description: document.getElementById("videoDesc").value,
+          monetize: document.getElementById("monetize").checked,
+          genre: document.getElementById("genre").value,
+          track_limit: "",
+          shuffle_order: "",
+          playlist_selection: playlistSelection
+        };
+
+        const res = await fetch("/split", {
+          method:"POST",
+          headers:{ "Content-Type":"application/json" },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        console.log("🎯 response:", json);
+
+        if (Array.isArray(json.session_ids)) {
+          let completed = 0; const total = json.session_ids.length;
+          json.session_ids.forEach(id=>{
+            listenToProgress(id, ()=>{
+              completed++; if (completed===total) { document.getElementById("splitButton").disabled=false; clearForm(); triggerCleanup(); }
+            });
+          });
+        } else {
+          listenToProgress(json.session_id, ()=>{
+            document.getElementById("splitButton").disabled=false; clearForm(); triggerCleanup();
+          });
+        }
+      }
+
+      function triggerCleanup(){
+        fetch("/cleanup",{method:"POST"})
+          .then(res=>res.json())
+          .then(data=>console.log("🧹 Cleanup result:",data))
+          .catch(err=>console.error("❌ Cleanup failed:",err));
+      }
+
+      function listenToProgress(sessionId,onComplete){
+        const src = new EventSource(`/progress/${sessionId}`);
+        const fill = document.getElementById("progressFill");
+        const status = document.getElementById("statusText");
+        const channelText = document.getElementById("channelText");
+
+        src.onmessage = function (event){
+          try{
+            const data = JSON.parse(event.data);
+            if (typeof data.percent === "number"){
+              fill.style.width = `${data.percent}%`;
+              fill.innerText = `${Math.round(data.percent)}%`;
+            }
+            const meta = data.meta || {};
+            const channel = meta.channel || "–";
+            const artist = meta.artist || meta.track?.artist || "–";
+            const trackName = meta.track?.name || "–";
+            const stem = meta.stem || "";
+            const bpm = meta.bpm || "";
+            const key = meta.key || "";
+            channelText.innerHTML = `<strong>Channel:</strong> ${channel}`;
+            status.innerHTML = `${data.message}<br><strong>${artist} – ${trackName} – ${stem}_${bpm}BPM_${key}</strong>`;
+            if (data.percent >= 100){ src.close(); if (onComplete) onComplete(); }
+          }catch(err){ console.error("❌ Failed to parse progress:",err,event.data); }
+        };
+        src.onerror = err => console.error("🚨 SSE connection error:",err);
+        src.onopen = () => console.log("✅ SSE connection opened.");
+      }
+
+      function clearForm(){
+        document.getElementById("playlistId").value="";
+        document.getElementById("scheduleStart").value="";
+        document.getElementById("interval").value="60";
+        document.getElementById("genre").value="hiphop";
+        document.getElementById("videoDesc").value="";
+        document.getElementById("videoTags").value="";
+        document.getElementById("privacy").value="private";
+        document.getElementById("audienceKids").checked=false;
+        document.getElementById("audienceNotKids").checked=true;
+        document.getElementById("monetize").checked=false;
+        ["vocalChannel","drumChannel","sampleSplitChannel","mainChannel","backupChannel"]
+          .forEach(id=>{ const el=document.getElementById(id); if(el) el.checked=false; });
+        const none=document.querySelector('input[name="playlistSel"][value="none"]'); if(none) none.checked=true;
+        document.getElementById("progressFill").style.width="0%";
+        document.getElementById("progressFill").innerText="0%";
+        document.getElementById("channelText").innerText="";
+        document.getElementById("statusText").innerText="✅ All tasks complete!";
+        document.getElementById("presetSelect").value="";
+        document.querySelector('input[name="presetMode"][value="replace"]').checked=true;
+        document.getElementById("applyDesc").checked=true;
+        document.getElementById("applyTags").checked=true;
+      }
+    </script>
+  </body>
+</html>

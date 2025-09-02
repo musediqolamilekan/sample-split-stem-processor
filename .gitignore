@@ -1,0 +1,66 @@
+# Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+.env/
+
+# Distribution/Packaging
+build/
+dist/
+*.egg-info/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing
+*.log
+nosetests.xml
+coverage.xml
+*.cover
+*.hypothesis/
+.tox/
+.coverage
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Flask/Django
+*.sqlite3
+*.db
+*.db-journal
+
+# mypy
+.mypy_cache/
+
+# Pytest
+.cache/
+
+# Sphinx documentation
+docs/_build/
+
+# Pylint
+pylint-report.txt
+pylint-output.txt
+
+# Django secrets (e.g., local settings)
+*.env
+
+# YouTube upload tokens
+yt_tokens/
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db

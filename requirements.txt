@@ -1,0 +1,49 @@
+# Web & API framework
+fastapi
+uvicorn
+jinja2
+
+# Audio processing, tagging & stem separation
+yt-dlp
+mutagen
+moviepy==1.0.3
+demucs==4.0.0
+torch  # Required for Demucs
+
+# Video rendering and manipulation
+imageio
+imageio-ffmpeg
+numpy
+Pillow==9.5.0
+decorator
+proglog
+
+# YouTube integration
+google-api-python-client
+google-auth
+google-auth-oauthlib
+
+# Spotify integration
+spotipy
+
+# Terminal progress and environment variables
+tqdm
+python-dotenv
+
+# EC2 Upload (SSH/SCP)
+paramiko
+scp
+
+# Extra utilities
+requests
+pydantic
+youtube-search
+beautifulsoup4
+google
+playwright 
+celery==5.3.6
+redis==5.0.3
+watchdog==4.0.0
+python-dotenv
+pytz
+pydub
